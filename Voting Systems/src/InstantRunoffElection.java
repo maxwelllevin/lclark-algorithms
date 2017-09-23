@@ -6,7 +6,7 @@ public class InstantRunoffElection {
 	private static final String[] CANDIDATE_NAMES = { "Akiko", "Bob", "Carlos", "Danielle" };
 
 	/** Tells us if a candidate has been eliminated. Changes every election. */
-	boolean[] ELIMINATED_CANDIDATES = { false, false, false, false };
+	private boolean[] ELIMINATED_CANDIDATES = { false, false, false, false };
 
 	/** Number of votes for each candidate. */
 	private int[] votes;
@@ -58,8 +58,7 @@ public class InstantRunoffElection {
 
 			}
 
-			// TODO: if no victor has been found, remove the least popular candidate
-			// If someone wins, exit InstantRunoff
+			// If someone wins the election is done
 			if (!nobodyWinsElection()) {
 				break;
 			}
