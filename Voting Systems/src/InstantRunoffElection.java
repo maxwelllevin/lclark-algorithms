@@ -5,54 +5,91 @@ public class InstantRunoffElection {
 	/** For simplicity, this is fixed for all elections. */
 	private static final String[] CANDIDATE_NAMES = { "Akiko", "Bob", "Carlos", "Danielle" };
 
-	// List of candidates to ignore for instant_runoff elections
-	private static String[] IGNORE_CANDIDATES = {};
+	/** Tells us if a candidate has been eliminated. Changes every election. */
+	boolean[] ELIMINATED_CANDIDATES = { false, false, false, false };
 
 	/** Number of votes for each candidate. */
 	private int[] votes;
 
-	// TODO: Modify this to actually do instant_runoff
+	/** Runs our Instant Runoff Election */
 	public InstantRunoffElection(String directory) {
 		votes = new int[CANDIDATE_NAMES.length];
 		File[] ballots = new File(directory).listFiles();
 
-		// Add least popular candidate to ignore list and count votes until a
-		// victor is found
-		while (!isWinner()) {
-			
+		// Reset our eliminated candidates array for every election
+		for (int i = 0; i < ELIMINATED_CANDIDATES.length; i++) {
+			ELIMINATED_CANDIDATES[i] = false;
+		}
+
+		// Run our election until we have a winner
+		while (true) {
+
+			// Cycle through all the ballots
 			for (File f : ballots) {
 				Ballot b = new Ballot(directory + f.getName());
 
-				// Loop through names on the ballot
+				// Check the ballot for the first uneliminated candidate ( 'i' is the current
+				// candidate index )
 				for (int i = 0; i < b.size(); i++) {
 
-					// If "--", votes are done
+					// If "--" there is nothing significant left in the ballot
 					if (b.get(i).equals("--")) {
 						break;
 					}
+					// If the current candidate has been eliminated, check the next one
+					else if (ELIMINATED_CANDIDATES[i]) {
+						continue;
+					}
 
-					// Ignore candidates on IgnoreList
-					// if (!b.get(i).equals(CANDIDATE_NAMES[i]
-					
+					// Check vote against candidate name
 					for (int j = 0; j < CANDIDATE_NAMES.length; j++) {
-						
-						// If vote is for a candidate, increment vote count for the candidate
+						// Increment the vote count for that candidate, then break
 						if (b.get(i).equals(CANDIDATE_NAMES[j])) {
 							votes[j]++;
 							break;
 						}
 
 					}
+
+					// Our if/else if statements ensure we find the first available candidate
+					// This break ensures we only consider such a candidate
+					break;
 				}
+
 			}
-			
-			addLoserToIgnoreList();
+
+			// TODO: if no victor has been found, remove the least popular candidate
+			// If someone wins, exit InstantRunoff
+			if (!nobodyWinsElection()) {
+				break;
+			}
+			// If nobody wins, eliminate the least popular candidate from the available
+			// candidates, run again
+			else {
+				// TODO: Might be necessary to check that there are uneliminated candidates
+				eliminateUnpopularCandidate();
+			}
 		}
 	}
 
-	private boolean isWinner() {
-		// Return false if winner != "Nobody". True otherwise.
-		return winner() != "Nobody";
+	private void eliminateUnpopularCandidate() {
+		// Eliminate the uneliminated candidate with the fewest votes
+		int fewestVotes = 1000;
+		int indexOfLeastVoted = -1;
+		for (int i = 0; i < votes.length; i++) {
+			if (votes[i] < fewestVotes && !ELIMINATED_CANDIDATES[i]) {
+				fewestVotes = votes[i];
+				indexOfLeastVoted = i;
+			}
+		}
+		// This will break if all candidates are eliminated. 
+		// Does not function properly if there is a tie ( we assume no ties, however )
+		ELIMINATED_CANDIDATES[indexOfLeastVoted] = true;
+	}
+
+	private boolean nobodyWinsElection() {
+		// Returns true when no victor has emerged
+		return winner().equals("Nobody");
 	}
 
 	/** Returns the winner of this election. */
@@ -65,30 +102,11 @@ public class InstantRunoffElection {
 				highestCount = votes[i];
 			}
 		}
-		return result;
-	}
-
-	/** Returns the loser of this election **/
-	public String addLoserToIgnoreList() {
-		int lowestCount = 5000;
-		String result = "Nobody";
-		for (int i = 0; i < votes.length; i++) {
-			if (votes[i] < lowestCount) {
-				result = CANDIDATE_NAMES[i];
-				lowestCount = votes[i];
-			}
+		// A winner needs more than 50% of votes to win
+		if (0.5 < (1.0 * highestCount) / (votes.length)) {
+			return "Nobody";
 		}
 		return result;
-	}
-
-	// Returns a String array of candidates who have lost previous elections
-	public static String[] getIGNORE_CANDIDATES() {
-		return IGNORE_CANDIDATES;
-	}
-
-	// Allows us to eliminate unpopular candidates from consideration
-	public static void setIGNORE_CANDIDATES(String[] iGNORE_CANDIDATES) {
-		IGNORE_CANDIDATES = iGNORE_CANDIDATES;
 	}
 
 }
