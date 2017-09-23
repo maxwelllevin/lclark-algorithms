@@ -1,6 +1,7 @@
 // Falling Sand Model by Journie Ma-Johnson and Maxwell Levin
+
 public class FallingSandModel {
-	public static final int MODEL_SIZE = 100;
+	public static final int MODEL_SIZE = 200;
 	public static final int METAL = 1;
 	public static final int EMPTY = 0;
 	public static final int SAND = 2;
