@@ -1,0 +1,9 @@
+Final code for the Voting Systems lab. This code simulates three different types of elections: Approval Elections, Plurality Elections, and Instant Runoff Elections.
+
+More information about these elections can be found at:
+        Plurality: https://en.wikipedia.org/wiki/Plurality_voting
+	Approval: https://en.wikipedia.org/wiki/Approval_voting
+	Instant Runoff: https://en.wikipedia.org/wiki/Instant-runoff_voting
+
+
+Created by Maxwell Levin and Journie Ma-Johnson
