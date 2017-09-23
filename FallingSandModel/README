@@ -5,3 +5,4 @@ Notes:
         Uses Stdlib.jar. Make sure you have included this in your build path for this project. 
         MODEL_SIZE in FallingSandModel.java is set to 200 by default. For higher resolution screens it is recommended to use ~100
         SPEED in FallingSand.java is set to 1000 by default. If you decrease MODEL_SIZE, it is recommended to decrease SPEED also.
+ 
