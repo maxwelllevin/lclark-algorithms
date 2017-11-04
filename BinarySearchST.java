@@ -10,6 +10,7 @@ public class BinarySearchST<Key extends Comparable<Key>, Value> {
 		keys = (Key[]) new Comparable[capacity];
 		vals = (Value[]) new Object[capacity];
 		n = 0;
+		compares = 0;
 	}
 
 	public int size() {
