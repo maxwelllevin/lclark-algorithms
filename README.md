@@ -1,3 +1,4 @@
 # lclark-algorithms
 
-Code I've written in Java for my Algorithms class.
+Code I wrote in Java for my Algorithms class.
+Co-author: Journie Ma-Johnson
